@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "eb37ea2d-5dbd-4c1c-9a50-d6fe80984f06",
+		"_postman_id": "ffb809d9-3085-4a3b-aea4-813e07f9ea30",
 		"name": "Books",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27961091"
 	},
 	"item": [
 		{
@@ -31,7 +32,12 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n     userId : \"test\", \r\n    title : \"titre livre 1\",\r\n    author : \"Luc\",\r\n    imageUrl : \"testUrlImg\",\r\n    year: 1987,\r\n    genre: \"science fiction\",\r\n    \r\n    averageRating : 5,\r\n}"
+					"raw": "{\r\n    \"userId\" : \"test\", \r\n    \"title\" : \"titre livre 2\",\r\n    \"author\" : \"Luc\",\r\n    \"imageUrl\" : \"testUrlImg\",\r\n    \"year\": 1987,\r\n    \"genre\": \"science fiction\",\r\n    \"averageRating\" : 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "localhost:3000/api/books",

@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
+const path = require('path');
 
-const Book = require('./models/Book')
+const bookRoutes = require('./routes/book')
+const userRoutes = require('./routes/user')
 
 mongoose.connect('mongodb+srv://thomasfigard:toMPsjJSnSSIHJOR@cluster0.4ncdqys.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -22,20 +24,8 @@ app.use((req, res, next) => {
     next();
 })
 
-app.post('/api/books', (req, res, next) => {
-    delete req.body._id;
-    const book = new Book({
-        ...req.body
-    });
-    book.save()
-        .then(() => res.status(201).json({message: 'Livre enregistré'}))
-        .catch(error => res.status(400).json({ error }));
-})
+app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.get('/api/books', (req, res, next) => {
-    Book.find()
-        .then(things => res.status(200).json(things))
-        .catch(things => res.status(400).json({error}))
-  });
-
-module.exports =app;
+module.exports = app;
