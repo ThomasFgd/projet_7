@@ -1,5 +1,6 @@
 const Book = require('../models/Book')
 const fs = require('fs')
+const sharp= require('sharp')
 
 exports.createBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
@@ -8,9 +9,16 @@ exports.createBook = (req, res, next) => {
     const book = new Book({
        ...bookObject,
        userId: req.auth.userId,
-       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    //    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-
+    const a = req.file.filename.split(".");
+    a.splice(a.length - 1, 1);
+    const newName = a.join("") + "_optimized." + "webp";
+    sharp("./images/" + req.file.filename)
+        .resize({ height: 500, fit: sharp.fit.contain })
+        .toFormat("webp")
+        .toFile("./images/" + newName);
+    book.imageUrl = `${req.protocol}://${req.get("host")}/images/${newName}`;
 
     book.save()
         .then(() => res.status(201).json({message: 'Livre enregistré'}))
@@ -94,8 +102,9 @@ exports.addRating = (req, res, next) => {
 }
 
 exports.bestRating = (req, res, next) => {
-    Book.findOne()
+    Book.find()
         .sort({ averageRating: -1 })
+        .limit(3)
         .then(book => res.status(200).json(book))
         .catch(error => res.status(400).json({ error }));
 }
