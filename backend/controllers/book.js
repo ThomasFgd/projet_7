@@ -9,12 +9,16 @@ exports.createBook = (req, res, next) => {
   const book = new Book({
     ...bookObject,
     userId: req.auth.userId,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`,
   });
 
-  sharp("./images/" + req.file.filename).toFile("./images/outputtest.jpg");
+  const a = req.file.filename.split(".");
+  a.splice(a.length - 1, 1);
+  const newName = a.join("") + "_optimized." + "webp";
+  sharp("./images/" + req.file.filename)
+    .resize({ width: 310, height: 500, fit: sharp.fit.cover })
+    .toFormat("webp")
+    .toFile("./images/" + newName);
+  book.imageUrl = `${req.protocol}://${req.get("host")}/images/${newName}`;
 
   book
     .save()
